@@ -46,7 +46,7 @@ contract TokenSale is MyJET {
     }
 
     /// @notice this function will tansfer tokens 
-    function buyTokens() public payable {
+    function buyTokens() external payable {
         
         require(balanceOf(minter) >= availableTokens, "Not enough tokens");
         require(minter != msg.sender);
@@ -68,11 +68,11 @@ contract TokenSale is MyJET {
         payable(minter).transfer(msg.value);
     }
 
-    function setfinalSalePrice(uint256 _finalSalePrice) public onlyOwner {
+    function setfinalSalePrice(uint256 _finalSalePrice) external onlyOwner {
                 finalsalePrice = _finalSalePrice;
     }
 
-    function getfinalSalePrice() public view returns(uint256) {
+    function getfinalSalePrice() external view returns(uint256) {
         return finalsalePrice;
     }
 }
