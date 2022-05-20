@@ -2,10 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "./MyJET.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title ico for MyJET token
 
-contract TokenSale is MyJET {
+contract TokenSale is MyJET, Ownable {
 
     uint256 unitsofToken = 238095;
     uint256 public finalsalePrice = 2380;
@@ -15,7 +16,6 @@ contract TokenSale is MyJET {
     uint256 public tokensSold;
     uint256 public availableTokens = 30000000 * 10 ** 18;
 
-    uint256 preSaleToken = 30000000 * 10 ** 18;
     uint256 seedSaleToken = 50000000 * 10 ** 18;
     uint256 finalSaleToken = 20000000 * 10 ** 18;
 
@@ -26,11 +26,6 @@ contract TokenSale is MyJET {
     }
 
     Stages public stage;
-
-    modifier onlyOwner {
-      require(msg.sender == minter);
-      _;
-    }
 
     /// @notice it will set the sale phase
     function setStage() internal {
@@ -48,8 +43,7 @@ contract TokenSale is MyJET {
     /// @notice this function will tansfer tokens 
     function buyTokens() external payable {
         
-        require(balanceOf(minter) >= availableTokens, "Not enough tokens");
-        require(minter != msg.sender);
+        require(msg.value != 0, "ethAmount cannot be zero");
 
         amount = msg.value * unitsofToken;
         tokensSold += amount;
@@ -58,8 +52,6 @@ contract TokenSale is MyJET {
         if ( availableTokens == 0 ) {
             setStage();
         }
-        
-        require(msg.value != 0, "ethAmount cannot be zero");
 
         /// @notice transfer the token to the buyer
         _transfer(minter, msg.sender, amount);
