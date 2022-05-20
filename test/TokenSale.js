@@ -49,7 +49,7 @@ describe('MyContract', function () {
             let error;
 
             try {
-                await wallet.buy(options);
+                await wallet.buyTokens(options);
             }
             catch (err) {
                 error = "sender does not have enough funds"
